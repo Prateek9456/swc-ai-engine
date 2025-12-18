@@ -1,0 +1,12 @@
+slope,rainfall,soil_type,infiltration,erosion_rate
+2,600,Sandy,High,3
+5,800,Loam,Medium,6
+9,1200,Loam,Medium,10
+12,1400,Clay,Low,15
+16,1600,Clay,Low,22
+20,1800,Clay,Low,28
+8,1000,Sandy,High,7
+14,1500,Loam,Medium,18
+18,1700,Clay,Low,25
+3,700,Sandy,High,4
+
