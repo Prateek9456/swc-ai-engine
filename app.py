@@ -5,10 +5,6 @@ import pickle
 # Import internal modules
 from models.runoff_logic import predict_runoff
 from rules.rule_engine import get_measures
-from models.explanation import generate_explanation
-from models.context_builder import build_decision_context
-from llm.explainer_agent import build_prompt
-from models.audience_validator import validate_audience_level
 
 
 
@@ -70,31 +66,6 @@ def predict():
     # Extract selected measure names
     selected_measures = [m["measure"] for m in measures_data]
 
-    # Build decision context for LLM
-    decision_context = build_decision_context(
-    slope=data["slope"],
-    rainfall=data["rainfall"],
-    soil_type=data["soil_type"],
-    infiltration=data["infiltration"],
-    erosion_risk=erosion_risk,
-    runoff_risk=runoff_risk,
-    selected_measures=selected_measures,
-    rejected_measures=["Only vegetative barriers"]
-)
-
-    # ======================
-    # Explanation Agent
-    # ======================
-    explanation_data = {
-        "slope": data["slope"],
-        "rainfall": data["rainfall"],
-        "infiltration": data["infiltration"],
-        "erosion_risk": erosion_risk,
-        "runoff_risk": runoff_risk
-    }
-
-    explanation = generate_explanation(explanation_data, measures)
-
     # ======================
     # Response
     # ======================
@@ -102,31 +73,7 @@ def predict():
         "erosionRisk": erosion_risk,
         "runoffRisk": runoff_risk,
         "measures": measures_data,
-        "explanation": explanation
     })
-
-@app.route("/llm-explain", methods=["POST"])
-def llm_explain():
-    data = request.json
-
-    decision_context = data["decision_context"]
-    question = data.get("question")
-
-    # 👇 ADD THESE TWO LINES HERE
-    audience_level = data.get("audience_level", "farmer")
-    validate_audience_level(audience_level)
-
-    # 👇 build prompt AFTER validation
-    prompt = build_prompt(
-        decision_context=decision_context,
-        audience_level=audience_level,
-        user_question=question
-    )
-
-    return jsonify({
-        "llm_prompt": prompt
-    })
-
 
 if __name__ == "__main__":
  app.run(debug=True, port=5000)
