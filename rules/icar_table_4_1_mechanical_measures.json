@@ -1,0 +1,86 @@
+[
+  {
+    "measure": "Contour bunding",
+    "slope_max": 6,
+    "soil_depth": ["SHALLOW", "MEDIUM", "DEEP"],
+    "rainfall_max": 800,
+    "land_use": ["SMALL_MILLETS", "PULSES", "OILSEEDS", "COARSE_GRAINS", "ROOT_CROPS", "VEGETABLES", "BARREN"]
+  },
+  {
+    "measure": "Contour bunding",
+    "slope_max": 6,
+    "soil_depth": ["SHALLOW", "MEDIUM", "DEEP"],
+    "rainfall_range": [800, 1500],
+    "land_use": ["SMALL_MILLETS", "PULSES", "OILSEEDS", "COARSE_GRAINS", "ROOT_CROPS", "VEGETABLES"]
+  },
+  {
+    "measure": "Graded bunding",
+    "slope_max": 6,
+    "soil_depth": ["SHALLOW"],
+    "rainfall_max": 800,
+    "land_use": ["SMALL_MILLETS", "PULSES", "OILSEEDS", "COARSE_GRAINS", "BARREN"]
+  },
+  {
+    "measure": "Bench terracing (level)",
+    "slope_max": 33,
+    "soil_depth": ["MEDIUM", "DEEP"],
+    "rainfall_range": [2500, 3000],
+    "land_use": ["PADDY", "SMALL_MILLETS", "PULSES", "OILSEEDS", "COARSE_GRAINS", "VEGETABLES"]
+  },
+  {
+    "measure": "Bench terracing (outward sloping)",
+    "slope_max": 33,
+    "soil_depth": ["SHALLOW"],
+    "rainfall_max": 1200,
+    "land_use": ["SMALL_MILLETS", "OATS", "BARREN"]
+  },
+  {
+    "measure": "Contour trenches (continuous)",
+    "slope_max": 8,
+    "soil_depth": ["MEDIUM", "DEEP"],
+    "rainfall_max": 1500,
+    "land_use": ["ROOT_CROPS", "VEGETABLES", "HORTICULTURE", "BARREN"]
+  },
+  {
+    "measure": "Contour trenches (staggered)",
+    "slope_max": 8,
+    "soil_depth": ["SHALLOW"],
+    "rainfall_max": 800,
+    "land_use": ["HORTICULTURE", "BARREN"]
+  },
+  {
+    "measure": "Graded trenches",
+    "slope_max": 33,
+    "soil_depth": ["MEDIUM", "DEEP"],
+    "rainfall_range": [2000, 3000],
+    "land_use": ["PLANTATION", "HORTICULTURE", "BARREN"]
+  },
+  {
+    "measure": "Conservation bench terracing",
+    "slope_max": 10,
+    "soil_depth": ["MEDIUM", "DEEP"],
+    "rainfall_range": [1200, 2000],
+    "land_use": ["PADDY", "MAIZE", "BARREN"]
+  },
+  {
+    "measure": "Zing terracing",
+    "slope_max": 10,
+    "soil_depth": ["SHALLOW", "MEDIUM"],
+    "rainfall_range": [1200, 2000],
+    "land_use": ["PADDY", "BARREN"]
+  },
+  {
+    "measure": "Stone wall (contour)",
+    "slope_max": 33,
+    "soil_depth": ["SHALLOW", "MEDIUM"],
+    "rainfall_max": 1500,
+    "land_use": ["PLANTATION", "HORTICULTURE", "BARREN"]
+  },
+  {
+    "measure": "Stone wall (graded)",
+    "slope_max": 33,
+    "soil_depth": ["SHALLOW", "MEDIUM"],
+    "rainfall_range": [1500, 2500],
+    "land_use": ["PLANTATION", "HORTICULTURE", "BARREN"]
+  }
+]

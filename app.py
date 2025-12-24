@@ -1,80 +1,51 @@
 from flask import Flask, request, jsonify
+from geo.factor_builder import build_factors
+from engine.rule_engine import evaluate_rules
 
-import pickle
-
-# Import internal modules
-from models.runoff_logic import predict_runoff
-from rules.rule_engine import get_measures
-
-
+RULE_FILE = "rules/icar_table_4_1_mechanical_measures.json"
 
 app = Flask(__name__)
-@app.route("/", methods=["GET"])
-def home():
-    return "Flask is running"
 
 
-# Load ML model
-with open("models/erosion_model.pkl", "rb") as f:
-    model = pickle.load(f)
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({"status": "ok"})
 
 
-@app.route("/predict", methods=["POST"])
-def predict():
-    data = request.json
+@app.route("/analyze", methods=["POST"])
+def analyze():
+    data = request.get_json(force=True)
 
-    # ======================
-    # Validate input
-    # ======================
-    required_fields = ["slope", "rainfall", "soil_type", "infiltration"]
+    lat = data.get("lat")
+    lon = data.get("lon")
+    land_use = data.get("land_use")
+    overrides = data.get("overrides")
 
-    for field in required_fields:
-        if field not in data:
-            return jsonify({"error": f"Missing field: {field}"}), 400
+    if lat is None or lon is None or land_use is None:
+        return jsonify({"error": "lat, lon, land_use are required"}), 400
 
-    # ======================
-    # ML Prediction
-    # ======================
-    erosion_risk = model.predict([[
-        data["slope"],
-        data["rainfall"],
-        data.get("soil_type_encoded", 1)  # fallback if not provided
-    ]])[0]
+    factors = build_factors(lat, lon, land_use, overrides)
 
-    # ======================
-    # Runoff Logic (NO ML)
-    # ======================
-    runoff_risk = predict_runoff(
-        rainfall=data["rainfall"],
-        infiltration=data["infiltration"]
-    )
+    result = evaluate_rules(factors, RULE_FILE)
 
-    # ======================
-    # Rule Engine
-    # ======================
-    rule_input = {
-        "slope": data["slope"],
-        "rainfall": data["rainfall"],
-        "soil_type": data["soil_type"],
-        "erosion_risk": erosion_risk
-    }
-
-    measures_data = get_measures(rule_input)
-    measures = [m["measure"] for m in measures_data]
-
-    
-    # Extract selected measure names
-    selected_measures = [m["measure"] for m in measures_data]
-
-    # ======================
-    # Response
-    # ======================
     return jsonify({
-        "erosionRisk": erosion_risk,
-        "runoffRisk": runoff_risk,
-        "measures": measures_data,
+        "location": {
+            "latitude": lat,
+            "longitude": lon
+        },
+        "factors": {
+            "rainfall_mm": factors.rainfall_mm,
+            "slope_percent": factors.slope_percent,
+            "soil_depth": factors.soil_depth,
+            "drainage": factors.drainage,
+            "land_use": land_use
+        },
+        "mechanical_measures": {
+            "mode": result["mode"],
+            "measures": result["measures"],
+            "land_use_considered": result["mode"] == "STRICT"
+        }
     })
 
 if __name__ == "__main__":
- app.run(debug=True, port=5000)
-
+    app.run(host="127.0.0.1", port=5000, debug=True)
